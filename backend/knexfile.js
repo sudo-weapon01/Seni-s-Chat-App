@@ -1,12 +1,17 @@
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
-const client = process.env.DB_CLIENT || 'sqlite3';
+const client = process.env.DB_CLIENT || (process.env.DATABASE_URL ? 'pg' : 'sqlite3');
 
 let connection;
 if (client === 'sqlite3') {
   connection = {
     filename: process.env.DB_FILENAME || path.join(__dirname, 'seni_chat.sqlite'),
+  };
+} else if (process.env.DATABASE_URL) {
+  connection = {
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.DB_SSL === 'false' ? false : { rejectUnauthorized: false },
   };
 } else {
   connection = {

@@ -16,7 +16,7 @@ function verifyAccessToken(token) {
 function cookieOptions() {
   return {
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: env.cookieSecure ? 'none' : 'lax',
     secure: env.cookieSecure,
     maxAge: 7 * 24 * 60 * 60 * 1000,
     path: '/',
